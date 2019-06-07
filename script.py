@@ -19,7 +19,7 @@ def findLastInversion(w):
 def findPivots(w, i, j):
   pivots = []
 
-  for h in range(i - 1, 0, -1):
+  for h in range(0, i):
     if w[h] < w[j]:
       isValid = True
       for hPrime in range(h, i):
@@ -60,5 +60,12 @@ def buildTree(w):
       buildTree(child)
 
 
-w = [5, 4, 2, 7, 8, 3, 1, 6]
+w = [2, 1, 5, 4, 6, 3]
+
+# i, j = findLastInversion(w)
+
+# print(str(i) + " " +str(j))
+
+# print(findPivots(w, i ,j))
+
 buildTree(w)
