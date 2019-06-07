@@ -11,13 +11,15 @@ def findLastInversion(w):
       if w[j] < w[i]:
         inversions.append((i, j))
   
+  # Loop backwards through inversions (guarantees maximum i, then maximum j)
   for inversion in reversed(inversions):
     pivots = findPivots(w, inversion[0], inversion[1])
 
     if len(pivots) != 0:
       return inversion[0], inversion[1], pivots
 
-  return list()
+  # No accessible inversion found
+  return None
 
 # Given a permutation and an inversion, find the pivots of the inversion
 def findPivots(w, i, j):
@@ -26,6 +28,7 @@ def findPivots(w, i, j):
   for h in range(0, i):
     if w[h] < w[j]:
       isValid = True
+      # ensure that all h' (h < h' < i ) satisfies w(h) < w(h') < w(j)
       for hPrime in range(h, i):
         if w[h] < w[hPrime] and w[hPrime] < w[j]:
           isValid = False
@@ -52,24 +55,20 @@ def findChildren(w, i, j, pivots):
   return children
 
 def buildTree(w):
-  print("called")
   try:
+    # Will throw an exception if no pivots are found
     i, j, pivots = findLastInversion(w)
+
     children = findChildren(w, i, j, pivots)
+    
     for child in children:
       buildTree(child)
   except:
+    # w is vexilliary, leaf has been reached
     print(w)
 
-  # if len(pivots) == 0:
-  #   print(w)
-  # else:
-  #   children = findChildren(w, i, j, pivots)
-  #   for child in children:
-  #     buildTree(child)
-
-
-w = [5, 4, 2, 7, 8, 3, 1, 6]
+# [5, 4, 2, 7, 8, 3, 1, 6]
+w = [3, 2, 4, 5, 1, 6]
 
 # print(findLastInversion(w))
 
