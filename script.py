@@ -4,16 +4,20 @@ import copy
 # a pair (i,j) with i < j and w(i) > w(j) that maximizes i, then j
 def findLastInversion(w):
 
-  biggestI = -1
-  biggestJ = -1
+  inversions = []
   
   for i in range(0, len(w)):
     for j in range(i, len(w)):
-      if w[j] < w[i] and (i > biggestI or (i == biggestI and j > biggestJ)):
-        biggestI = i
-        biggestJ = j
+      if w[j] < w[i]:
+        inversions.append((i, j))
   
-  return (biggestI, biggestJ)
+  for inversion in reversed(inversions):
+    pivots = findPivots(w, inversion[0], inversion[1])
+
+    if len(pivots) != 0:
+      return inversion[0], inversion[1], pivots
+
+  return list()
 
 # Given a permutation and an inversion, find the pivots of the inversion
 def findPivots(w, i, j):
@@ -49,20 +53,25 @@ def findChildren(w, i, j, pivots):
 
 def buildTree(w):
   print("called")
-  i, j = findLastInversion(w)
-  pivots = findPivots(w, i, j)
-
-  if len(pivots) == 0:
-    print(w)
-  else:
+  try:
+    i, j, pivots = findLastInversion(w)
     children = findChildren(w, i, j, pivots)
     for child in children:
       buildTree(child)
+  except:
+    print(w)
+
+  # if len(pivots) == 0:
+  #   print(w)
+  # else:
+  #   children = findChildren(w, i, j, pivots)
+  #   for child in children:
+  #     buildTree(child)
 
 
-w = [2, 1, 5, 4, 6, 3]
+w = [5, 4, 2, 7, 8, 3, 1, 6]
 
-# i, j = findLastInversion(w)
+# print(findLastInversion(w))
 
 # print(str(i) + " " +str(j))
 
