@@ -10,26 +10,24 @@ def findLastInversion(w):
     for j in range(i, len(w)):
       if w[j] < w[i]:
         inversions.append((i, j))
-  # print(inversions)
+
   # Loop backwards through inversions (guarantees maximum i, then maximum j)
   for inversion in reversed(inversions):
     i, j = inversion[0], inversion[1]
+
+    # TODO: find the inverse of j HERE
+    j_inverse = -1
+      
+    for idx in range(0, len(w)):
+      if w[idx] == j + 1:
+        j_inverse = idx
+        break
+    j = j_inverse
 
     pivots = findPivots(w, i, j)
 
     # First inversion with pivots
     if len(pivots) != 0:
-      # print("i, j")
-      # print(i, j)
-      # TODO: find the inverse of j HERE
-      j_inverse = -1
-      
-      for idx in range(0, len(w)):
-        elem = w[idx]
-        if elem == j:
-          j_inverse = elem
-      # print(j_inverse)
-
       return i, j_inverse, pivots
 
   # No accessible inversion found
@@ -56,17 +54,15 @@ def findChildren(w, i, j, pivots):
   children = []
 
   for pivot in pivots:
+    tmpH = w[pivot]
     tmpI = w[i]
     tmpJ = w[j]
-    tmpH = w[pivot]
 
     child = copy.deepcopy(w)
+    
     child[pivot] = tmpJ
     child[i] = tmpH
     child[j] = tmpI
-
-    if child == [5, 4, 6, 7, 2, 3, 1, 8]:
-      print(i, j, pivot)
     
     children.append(child)
 
@@ -81,17 +77,10 @@ def buildTree(w):
 
     for child in children:
       buildTree(child)
+      print("child:", child)
   except:
     # w is vexilliary, leaf has been reached
     print(w)
 
-# [5, 4, 2, 7, 8, 3, 1, 6]
-w = [5, 4, 2, 7, 8, 3, 1, 6]
-
-# print(findLastInversion(w))
-
-# print(str(i) + " " +str(j))
-
-# print(findPivots(w, i ,j))
-
+w = [5,4,2,7,8,3,1,6]
 buildTree(w)
