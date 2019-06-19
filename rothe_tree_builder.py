@@ -39,6 +39,7 @@ def find_accessible_box(rothe):
   
   return accessible_box
 
+# this is broken (I think)
 def find_pivots(rothe, accessible_box):
   pivots = []
 
@@ -57,7 +58,9 @@ def find_children(w, rothe):
   i = accessible_box[0]
   j = -1
 
+  # find inverse of accessible box's column
   for idx in range(0, len(w)):
+    # must adjust by 1 because of 0 based indexing
     if w[idx] == accessible_box[1] + 1:
       j = idx
       break
@@ -88,11 +91,11 @@ def build_tree(w):
   # print(w)
   rothe = build_rothe_diagram(w)
   # print(rothe)
-  if w == [5, 6, 2, 7, 4, 3, 1, 8]:
-    print("HERE+++++")
+  # if w == [5, 6, 2, 7, 4, 3, 1, 8]:
+  #   print("HERE+++++")
   children = find_children(w, rothe)
-  if w == [5, 6, 2, 7, 4, 3, 1, 8]:
-    print(children)
+  # if w == [5, 6, 2, 7, 4, 3, 1, 8]:
+  #   print(children)
 
   # return
   if len(children) == 0:
