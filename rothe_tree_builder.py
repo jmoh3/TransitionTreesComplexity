@@ -6,7 +6,7 @@ DOT = 1
 LINE = 2
 DOMINANT_COMPONENT = 3
 
-# builds the rothe diagram for a permutation w
+# Builds the rothe diagram for a permutation w
 def build_rothe_diagram(w):
   diagram = np.zeros((len(w), len(w)))
 
@@ -19,17 +19,20 @@ def build_rothe_diagram(w):
     for k in range(i + 1, len(w)):
       diagram[k][w[i] - 1] = LINE
     
-  diagram[0][0] = 3
+  # fill dominant component
+  diagram[0][0] = DOMINANT_COMPONENT
 
   for i in range(0, len(w)):
     for j in range(0, len(w)):
       if diagram[i][j] != 0 and not (i == 0 and j == 0):
         break
-      if i == 0 or diagram[i - 1][j] == 3:
-        diagram[i][j] = 3
+      if i == 0 or diagram[i - 1][j] == DOMINANT_COMPONENT:
+        diagram[i][j] = DOMINANT_COMPONENT
 
   return diagram
 
+# Finds the accessible box of a permutation, or returns None
+# if it doesn't exist.
 def find_accessible_box(rothe):
   accessible_box = (0, 0)
 
@@ -38,18 +41,18 @@ def find_accessible_box(rothe):
   if is_vexilliary(rothe, ess) or len(ess) == 0:
     return None
 
-  accessible_box = (0, 0)
+  accessible_box = (-1, -1)
 
   for elem in ess:
-    if elem[2] != 3:
-      if accessible_box == (0, 0):
+    if elem[2] != DOMINANT_COMPONENT:
+      if accessible_box == (-1, -1):
         accessible_box = (elem[0], elem[1])
       if elem[0] > accessible_box[0] or (elem[0] == accessible_box[0] and elem[1] > accessible_box[1]):
         accessible_box = (elem[0], elem[1])
   
   return accessible_box
 
-# this is broken (I think)
+# Finds the pivots of a permutation given the accessible box
 def find_pivots(rothe, accessible_box):
   pivots = []
 
@@ -60,6 +63,7 @@ def find_pivots(rothe, accessible_box):
   
   return pivots
 
+# Finds the children of a given permutation
 def find_children(w, rothe):
   accessible_box = find_accessible_box(rothe)
 
@@ -79,7 +83,7 @@ def find_children(w, rothe):
       break
 
   if len(pivots) == 0:
-    return list()
+    return []
 
   children = []
 
@@ -88,6 +92,7 @@ def find_children(w, rothe):
 
     h = pivot[0]
 
+    # swapping move: ... v(h) ... v(i) ... v(j) ... ---> ... v(j) ... v(h) ... v(i) ...
     w_h = w[h]
     w_i = w[i]
     w_j = w[j]
@@ -100,6 +105,7 @@ def find_children(w, rothe):
 
   return children
 
+# Builds the Lascaux-Schutzenberger transition tree recursively, printing each leaf
 def build_tree(w):
   rothe = build_rothe_diagram(w)
 
@@ -111,6 +117,10 @@ def build_tree(w):
     for child in children:
       build_tree(child)
 
+# Returns the essential set of a permutation, where each element is of the form
+# (row of box, column of box, type of box (blank space or dominant component))
+#
+# The essential set consists of the maximally southeast boxes of each connected component.
 def build_essential_set(rothe):
   essential_set = []
 
@@ -127,6 +137,11 @@ def build_essential_set(rothe):
   
   return essential_set
 
+# Returns true if permutation is vexilliary, false otherwise.
+#  
+# Based on whether it meets Fulton's criterion:
+# a permutation is vexillary if and only if there does not exist two essential set 
+# boxes where one is strictly northwest of the other
 def is_vexilliary(rothe, essential_set):
 
   for idx in range(0, len(essential_set)):
@@ -141,9 +156,8 @@ def is_vexilliary(rothe, essential_set):
         return False
   
   return True
-
        
-# checks if a = (i_1, j_2) is northwest of b = (i_2, j_2)
+# Returns true if a = (i_1, j_2) is northwest of b = (i_2, j_2)
 def is_strictly_northwest(a, b):
   if a[0] < b[0] and a[1] < b[1]:
     return True
@@ -152,11 +166,3 @@ def is_strictly_northwest(a, b):
 w = [5,4,2,7,8,3,1,6]
 
 build_tree(w)
-
-# rothe = build_rothe_diagram(w)
-
-# ess = build_essential_set(rothe)
-
-# print(is_vexilliary(w, ess))
-
-# build_tree([5, 6, 2, 7, 4, 3, 1, 8])
