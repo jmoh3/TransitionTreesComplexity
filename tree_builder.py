@@ -1,3 +1,4 @@
+import copy
 
 def find_pivots(w, inversion):
   i = inversion[0]
@@ -36,13 +37,14 @@ def find_accessible_inversion(w):
 
   for inversion in reversed(inversions):
     i = inversion[0]
+    j = inversion[1]
     # account for zero based indexing
-    adjusted_inversion_col = inversion[1] + 1
-    j = -1
+    # adjusted_inversion_col = inversion[1] + 1
+    # j = -1
 
-    for idx in range(0, len(w)):
-      if w[idx] == adjusted_inversion_col:
-        j = idx
+    # for idx in range(0, len(w)):
+    #   if w[idx] == adjusted_inversion_col:
+    #     j = idx
     
     pivots = find_pivots(w, (i, j))
 
@@ -51,7 +53,35 @@ def find_accessible_inversion(w):
 
   return None
 
-print(find_accessible_inversion(permutation))
+def find_children(w, i, j, pivots):
+  adjusted_inversion_col = j + 1
+  j_inverse = -1
 
-assert find_accessible_inversion(permutation) == (4, 7, [0, 1, 2])
-assert find_accessible_inversion([2,1,5,4,6,3]) == (4, 5, [0, 1])
+  for idx in range(0, len(w)):
+    if w[idx] == adjusted_inversion_col:
+      j_inverse = idx
+      break
+  
+  print("j inverse", j_inverse)
+
+  children = []
+
+  for pivot in pivots:
+    tmp_h = w[pivot]
+    tmp_i = w[i]
+    tmp_j_inverse = w[j_inverse]
+
+    child = copy.deepcopy(w)
+    
+    child[pivot] = tmp_j_inverse
+    child[i] = tmp_h
+    child[j_inverse] = tmp_i
+    
+    children.append(child)
+  
+  return children
+
+print(find_children(permutation, 4, 7, [0, 1, 2]))
+
+# assert find_accessible_inversion(permutation) == (4, 7, [0, 1, 2])
+# assert find_accessible_inversion([2,1,5,4,6,3]) == (4, 5, [0, 1])

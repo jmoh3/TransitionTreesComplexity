@@ -6,6 +6,7 @@ DOT = 1
 LINE = 2
 DOMINANT_COMPONENT = 3
 
+# builds the rothe diagram for a permutation w
 def build_rothe_diagram(w):
   diagram = np.zeros((len(w), len(w)))
 
@@ -32,10 +33,19 @@ def build_rothe_diagram(w):
 def find_accessible_box(rothe):
   accessible_box = (0, 0)
 
-  for i in range(0, len(rothe)):
-    for j in range(0, len(rothe)):
-      if rothe[i][j] == 0 and (i > accessible_box[0] or (i == accessible_box[0] and j > accessible_box[1])):
-        accessible_box = (i, j)
+  ess = build_essential_set(rothe)
+
+  if is_vexilliary(rothe, ess) or len(ess) == 0:
+    return None
+
+  accessible_box = (0, 0)
+
+  for elem in ess:
+    if elem[2] != 3:
+      if accessible_box == (0, 0):
+        accessible_box = (elem[0], elem[1])
+      if elem[0] > accessible_box[0] or (elem[0] == accessible_box[0] and elem[1] > accessible_box[1]):
+        accessible_box = (elem[0], elem[1])
   
   return accessible_box
 
@@ -52,8 +62,11 @@ def find_pivots(rothe, accessible_box):
 
 def find_children(w, rothe):
   accessible_box = find_accessible_box(rothe)
+
+  if accessible_box == None:
+    return []
+
   pivots = find_pivots(rothe, accessible_box)
-  print(accessible_box, pivots)
 
   i = accessible_box[0]
   j = -1
@@ -88,28 +101,62 @@ def find_children(w, rothe):
   return children
 
 def build_tree(w):
-  # print(w)
   rothe = build_rothe_diagram(w)
-  # print(rothe)
-  # if w == [5, 6, 2, 7, 4, 3, 1, 8]:
-  #   print("HERE+++++")
-  children = find_children(w, rothe)
-  # if w == [5, 6, 2, 7, 4, 3, 1, 8]:
-  #   print(children)
 
-  # return
+  children = find_children(w, rothe)
+
   if len(children) == 0:
     print(w)
   else:
     for child in children:
       build_tree(child)
 
-w = [5,4,2,7,8,3,1,6]
+def build_essential_set(rothe):
+  essential_set = []
 
-# print(build_rothe_diagram(w))
+  for i in range(0, len(rothe) - 1):
+    for j in range(0, len(rothe) - 1):
+      is_box = rothe[i][j] == BLANK_SPACE or rothe[i][j] == DOMINANT_COMPONENT
+      is_southwest = (rothe[i + 1][j] != BLANK_SPACE and rothe[i + 1][j] != DOMINANT_COMPONENT) and (rothe[i][j + 1] != BLANK_SPACE and rothe[i][j + 1] != DOMINANT_COMPONENT)
+      
+      if is_box and is_southwest:
+        if (rothe[i][j] == BLANK_SPACE):
+          essential_set.append((i, j, BLANK_SPACE))
+        else:
+          essential_set.append((i, j, DOMINANT_COMPONENT))
+  
+  return essential_set
+
+def is_vexilliary(rothe, essential_set):
+
+  for idx in range(0, len(essential_set)):
+    elem = essential_set[idx]
+    i = elem[0]
+    j = elem[1]
+
+    for idx_b in range(idx + 1, len(essential_set)):
+      to_compare = essential_set[idx_b]
+
+      if is_strictly_northwest(elem, to_compare) or is_strictly_northwest(to_compare, elem):
+        return False
+  
+  return True
+
+       
+# checks if a = (i_1, j_2) is northwest of b = (i_2, j_2)
+def is_strictly_northwest(a, b):
+  if a[0] < b[0] and a[1] < b[1]:
+    return True
+  return False
+
+w = [5,4,2,7,8,3,1,6]
 
 build_tree(w)
 
-# new_w = [6, 4, 2, 7, 5, 3, 1, 8]
+# rothe = build_rothe_diagram(w)
 
-# build_tree(new_w)
+# ess = build_essential_set(rothe)
+
+# print(is_vexilliary(w, ess))
+
+# build_tree([5, 6, 2, 7, 4, 3, 1, 8])
