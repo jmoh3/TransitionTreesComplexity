@@ -157,12 +157,43 @@ def is_vexilliary(rothe, essential_set):
   
   return True
        
-# Returns true if a = (i_1, j_2) is northwest of b = (i_2, j_2)
+# Returns true if a = (i_1, j_1) is northwest of b = (i_2, j_2)
 def is_strictly_northwest(a, b):
   if a[0] < b[0] and a[1] < b[1]:
     return True
   return False
 
-w = [5,4,2,7,8,3,1,6]
+def sort_to_partition(rothe):
+  partition = list()
 
+  for i in range(len(rothe)):
+    count = 0
+    for j in range(len(rothe)):
+      if rothe[i][j] == BLANK_SPACE or rothe[i][j] == DOMINANT_COMPONENT:
+        count += 1
+    partition.append(count)
+
+  partition.sort(reverse=True)
+
+  return partition
+
+# Builds the Lascaux-Schutzenberger transition tree recursively, printing each leaf
+def get_lambda_leaves(w):
+  rothe = build_rothe_diagram(w)
+
+  children = find_children(w, rothe)
+
+  if len(children) == 0:
+    print(sort_to_partition(rothe))
+  else:
+    for child in children:
+      get_lambda_leaves(child)
+
+# w = [5,4,2,7,8,3,1,6]
+
+# build_tree(w)
+
+# get_lambda_leaves(w)
+
+w = [3, 2, 1, 4, 6, 5]
 build_tree(w)
