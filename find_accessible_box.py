@@ -14,4 +14,4 @@ def find_accessible_box(l):
     
     return accessible_box
 
-print(find_accessible_box([4, 3, 1, 3, 1, 1]))
+# print(find_accessible_box([4, 3, 1, 3, 1, 1]))

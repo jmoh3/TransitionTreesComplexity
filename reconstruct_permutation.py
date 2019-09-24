@@ -16,5 +16,5 @@ def reconstruct_permutation(l):
     
     return w
 
-l = [3, 0, 5, 2, 1]
-print(reconstruct_permutation(l))
+l = [4, 2, 0, 3]
+# print(reconstruct_permutation(l))
