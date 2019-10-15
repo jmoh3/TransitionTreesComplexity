@@ -1,31 +1,10 @@
 import numpy as np
+import sys
 
 BOX = 0
 DOT = 1
 HLINE = 2
 VLINE = 3
-
-# def build_rothe_diagram(l):
-#   dim = max(max(l)+1, len(l))
-#   diagram = np.zeros((dim, dim))
-
-#   for i in range(len(l)):
-#     num_boxes = 0
-#     for j in range(len(diagram[i])):
-#         if diagram[i][j] == VLINE:
-#             continue
-#         if num_boxes < l[i]:
-#             num_boxes += 1
-#         elif num_boxes == l[i]:
-#             num_boxes += 1
-#             diagram[i][j] = DOT
-#             for k in range(i+1, len(l)):
-#                 diagram[k][j] = VLINE
-#         else:
-#             diagram[i][j] = HLINE
-#   return diagram
-
-# print(build_rothe_diagram([1, 2, 3]))
 
 def build_rothe_diagram(w):
   diagram = np.zeros((len(w), len(w)))
@@ -60,4 +39,6 @@ def draw_diagram(w):
     latex_str += '\\end{tikzpicture}};'
     return latex_str
 
-print(draw_diagram([3, 4, 1, 2]))
+if __name__ == '__main__':
+  w = [int(char) for char in sys.argv[1:]]
+  print(draw_diagram(w))
