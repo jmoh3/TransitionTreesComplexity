@@ -40,7 +40,7 @@ def draw_diagram(w):
     
   latex_str += '\\end{tikzpicture}'
   return latex_str
-  
+
 def compile_latex(rothe_string):
   doc_beginning = '\\documentclass[12pt]{amsart}\n\\usepackage[utf8]{inputenc}\n\\usepackage{amsfonts, amssymb, latexsym, graphicx, hyperref, amsmath}\n%\\usepackage[linesnumbered,ruled]{algorithm2e}\n\\usepackage{tikz}\n\\title{rothe-diagram-template}\n\\date{October 2019}\n\\begin{document}\n'
   doc_end = '\\end{document}'
