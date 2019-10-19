@@ -20,7 +20,7 @@ make draw w='5 4 2 7 8 3 1 6'
 
 Will generate a picture that looks like this:
 
-![alt text][rothe_example.png]
+![alt text][https://github.com/jmoh3/TransitionTreesComplexity/blob/master/rothe_example.png]
 
 ## Old Stuff
 
