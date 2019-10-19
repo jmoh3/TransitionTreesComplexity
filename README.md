@@ -18,6 +18,10 @@ To generate a pdf containing the rothe diagram for your permutation. The permuta
 make draw w='5 4 2 7 8 3 1 6'
 ```
 
+Will generate a picture that looks like this:
+
+![alt text][rothe_example.png]
+
 ## Old Stuff
 
 * original_tree_builder.py contains original one line notation approach as described by Brendan's email and Alex's amendments
