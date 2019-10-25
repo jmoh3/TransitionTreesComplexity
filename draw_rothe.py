@@ -48,7 +48,7 @@ def compile_latex(rothe_string):
   with open('main.tex', 'w') as file:
     file.write(doc_beginning + rothe_string + doc_end)
   
-  os.system('pdflatex main.tex')
+  os.system('pdflatex -interaction=batchmode main.tex')
   os.system('open main.pdf')
     
 if __name__ == '__main__':
