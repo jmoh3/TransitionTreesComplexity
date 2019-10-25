@@ -19,7 +19,7 @@ if __name__ == '__main__':
 
     while True:
         print('Please choose a pivot')
-        pivot = int(input())
+        pivot = int(input()) - 1
         lehmer_code = get_new_lehmer_code(lehmer_code, pivot)
         print(lehmer_code)
         latex = draw(lehmer_code, latex)
