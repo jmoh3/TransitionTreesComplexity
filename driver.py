@@ -8,7 +8,7 @@ from make_transition import get_new_lehmer_code
 
 def draw(lehmer, latex):
     w = reconstruct_permutation_complete(lehmer)
-    latex = latex + draw_diagram(w) + '\n'
+    latex = latex + draw_diagram(w) + '\n\n\\newline\n\\vspace{1.0cm}\n\n'
     compile_latex(latex)
     return latex
 
